@@ -8,7 +8,8 @@ Auth page is accessible at local url http://localhost:3000/auth
 
 - Auth page contains logo, sign in button hero image
 - Auth modal contains modals upper part
-
+- Login modal
+- Signin modal
 
 ## Run the app
 
