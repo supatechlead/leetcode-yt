@@ -10,6 +10,7 @@ Auth page is accessible at local url http://localhost:3000/auth
 - Auth modal contains modals upper part
 - Login modal
 - Signin modal
+- Reset password
 
 ## Run the app
 
