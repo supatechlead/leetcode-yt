@@ -8,19 +8,26 @@ import Router from "next/router";
 type SignupProps = {};
 
 const Signup:React.FC<SignupProps> = () => {
+    
     const setAuthModalState = useSetRecoilState(authModalState)
+    
     const handleClick = () => {
         setAuthModalState((prev) => ({ ...prev, type: "login" }))
     };
+    
     const [inputs, setInputs] = useState({email:'', displayName:'', password:''});
+    
     const router = useRouter();
+    
     const [createUserWithEmailAndPassword,user,loading,error,] = useCreateUserWithEmailAndPassword(auth);
 
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
+
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+        if(!inputs.email || !inputs.password || !inputs.displayName) return alert ("Please fill all fields")
         try {
             const newUser = await createUserWithEmailAndPassword(inputs.email, inputs.password);
             if(!newUser) return;
@@ -29,6 +36,10 @@ const Signup:React.FC<SignupProps> = () => {
             alert(error.message)
         }
     };
+
+    useEffect(() => {
+        if (error) alert(error.message)
+    }, [error])
 
     return (
         <form className='space-y-6 px-6 pb-4' onSubmit={handleRegister}>
@@ -86,7 +97,7 @@ const Signup:React.FC<SignupProps> = () => {
             className="w-full text-white focus:ring-blue-300 font-medium rounded-lg
                 text-sm px-5 py-2.5 text-center bg-brand-orange hover:bg-brand-orange-s"   
         >
-            Register
+            {loading ? "Registering..." : "Register"}
         </button>
 
         <div className="text-sm font-medium text-gray-300">
