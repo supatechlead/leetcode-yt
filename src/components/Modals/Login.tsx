@@ -1,16 +1,13 @@
 import { authModalState } from '@/atoms/authModalAtom';
 import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/router";
-import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useSetRecoilState } from 'recoil';
-import { ImportsNotUsedAsValues } from 'typescript';
-
 type LoginProps = {};
 
 const Login:React.FC<LoginProps> = () => {
-    
+
     const setAuthModalState = useSetRecoilState(authModalState)
     
     const handleClick = (type:"login" | "register" | "forgotPassword") => {
@@ -19,7 +16,7 @@ const Login:React.FC<LoginProps> = () => {
     
     const [inputs, setInputs ] = useState({ email: "", password: ""});
     
-    const [signInWithEmailAndPasword, user, loading, error] = useSignInWithEmailAndPassword(auth)
+    const [signInWithEmailAndPasword, user, loading, error] = useSignInWithEmailAndPassword(auth);
 
     const router = useRouter();
 

@@ -5,7 +5,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from "@/firebase/firebase"
 import { useRecoilValue } from 'recoil';
 import { useState, useEffect } from 'react';
-import Router from 'next/router';
 import { useRouter } from "next/router"
 type AuthPageProps = {};
 
