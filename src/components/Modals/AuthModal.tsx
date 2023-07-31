@@ -2,9 +2,9 @@ import { authModalState } from '@/atoms/authModalAtom';
 import React, { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import Login from "./Login";
-import ResetPassword from './ResetPassword';
-import Signup from './Signup';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import ResetPassword from "./ResetPassword";
+import Signup from "./Signup";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 type AuthModalProps = {};
 
@@ -22,7 +22,7 @@ const AuthModal:React.FC<AuthModalProps> = () => {
                             <button
                                 type='button'
                                 className='bg-transparent  rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-800 
-                                hover:text-white text-white'
+                                    hover:text-white text-white'
                                 onClick={closeModal}
                             >
                                 <IoClose className='h-5 w-5'/>
@@ -41,7 +41,7 @@ function useCloseModal() {
 	const setAuthModal = useSetRecoilState(authModalState);
 
 	const closeModal = () => {
-		setAuthModal((prev) => ({ ...prev, isOpen: false }));
+		setAuthModal((prev) => ({ ...prev, isOpen: false, type: "login" }));
 	};
 
 	useEffect(() => {
