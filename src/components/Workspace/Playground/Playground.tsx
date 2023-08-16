@@ -5,22 +5,21 @@ import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from "@codemirror/lang-javascript";
 import EditorFooter from './EditorFooter';
+import { Problem } from '@/utils/types/problem';
 
 type PlaygroundProps = {
-    
+  problem: Problem  
 };
 
-const Playground:React.FC<PlaygroundProps> = () => {
-    const boilerPlate = `function twoSum(nums, target) {
-  // write your code
-};`;   
+const Playground:React.FC<PlaygroundProps> = ({problem}) => {
+  
     return (
         <div className="flex flex-col bg-dark-layer-1 relative overflow-x-hidden">
           <PreferenceNav />  
           <Split className='h-[calc(100vh-94px)]' direction='vertical' sizes={[60, 40]} minSize={60}>
             <div className='w-full overflow-auto'>
             <CodeMirror
-              value={boilerPlate}
+              value={problem.starterCode}
 						  theme={vscodeDark}
 						  extensions={[javascript()]}
 						  style={{ fontSize: 16 }}
