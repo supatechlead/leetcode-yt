@@ -1,11 +1,11 @@
 import ProblemsTable from "@/components/ProblemsTable/ProblemsTable";
 import Topbar from "@/components/Topbar/Topbar";
-import { firestore } from "@/firebase/firebase";
-import { doc, setDoc } from "firebase/firestore";
-import React, { useState } from "react";
+/* import { firestore } from "@/firebase/firebase";
+import { doc, setDoc } from "firebase/firestore"; */
+import { useState } from "react";
 
 export default function Home() {
-	const [inputs, setInputs] = useState({
+/* 	const [inputs, setInputs] = useState({
 		id: '',
 		title: '',
 		difficulty: '',
@@ -34,7 +34,7 @@ export default function Home() {
 		}
 		await setDoc(doc(firestore, "problems", inputs.id ), newProblem);
 		alert("Saved to db")
-	}
+	} */
 
   return (
     <>    
@@ -73,7 +73,7 @@ export default function Home() {
 				</div>
 
 				{/* temporaru form */}
-				<form className="p-6 flex flex-col max-w-sm gap-3" onSubmit={handleSubmit}>
+{/* 				<form className="p-6 flex flex-col max-w-sm gap-3" onSubmit={handleSubmit}>
 					<input onChange={handleInputChange} type="text" placeholder="problem id" name="id" />
 					<input onChange={handleInputChange} type="text" placeholder="title" name="title" />
 					<input onChange={handleInputChange} type="text" placeholder="difficulty" name="difficulty" />
@@ -82,7 +82,7 @@ export default function Home() {
 					<input onChange={handleInputChange} type="text" placeholder="videoId?" name="videoId" />
 					<input onChange={handleInputChange} type="text" placeholder="link?" name="link" />
 					<button className="bg-white">Save to database</button>
-				</form>
+				</form> */}
       </main>
     </>
 
