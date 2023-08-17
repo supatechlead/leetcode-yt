@@ -73,7 +73,7 @@ const Topbar:React.FC<TopbarProps> = ({ problemPage}) => {
 								<p className='text-sm'>{user.email}</p>
 							</div>
 						</div>
-					)};
+					)}
 					{user && <Logout />}
 				</div>
             </div>
