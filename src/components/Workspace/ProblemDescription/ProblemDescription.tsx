@@ -1,13 +1,22 @@
-import { Problem } from "@/utils/types/problem";
-import { AiFillLike, AiFillDislike } from "react-icons/ai";
+// import CircleSkeleton from "@/components/Skeletons/CircleSkeleton";
+// import RectangleSkeleton from "@/components/Skeletons/RectangleSkeleton";
+import { auth, firestore } from "@/firebase/firebase";
+import { DBProblem, Problem } from "@/utils/types/problem";
+import { arrayRemove, arrayUnion, doc, getDoc, runTransaction, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { AiFillLike, AiFillDislike, AiOutlineLoading3Quarters, AiFillStar } from "react-icons/ai";
 import { BsCheck2Circle } from "react-icons/bs";
 import { TiStarOutline } from "react-icons/ti";
+import { toast } from "react-toastify";
 
 type ProblemDescriptionProps = {
 	problem: Problem;
 };
 
 const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
+	const { currentProblem, loading, problemDifficultyClass, setCurrentProblem } = useGetCurrentProblem(problem.id);
+
 	return (
 		<div className='bg-dark-layer-1'>
 			{/* TAB */}
@@ -24,27 +33,29 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
 						<div className='flex space-x-4'>
 							<div className='flex-1 mr-2 text-lg text-white font-medium'>{problem.title}</div>
 						</div>
-						<div className='flex items-center mt-3'>
-							<div
-								className={`text-olive bg-olive inline-block rounded-[21px] bg-opacity-[.15] px-2.5 py-1 text-xs font-medium capitalize `}
-							>
-								Easy
+						{!loading && currentProblem && (
+							<div className='flex items-center mt-3'>
+								<div
+									className={`${problemDifficultyClass} inline-block rounded-[21px] bg-opacity-[.15] px-2.5 py-1 text-xs font-medium capitalize `}
+								>
+									{currentProblem.difficulty}
+								</div>
+								<div className='rounded p-[3px] ml-4 text-lg transition-colors duration-200 text-green-s text-dark-green-s'>
+									<BsCheck2Circle />
+								</div>
+								<div className='flex items-center cursor-pointer hover:bg-dark-fill-3 space-x-1 rounded p-[3px]  ml-4 text-lg transition-colors duration-200 text-dark-gray-6'>
+									<AiFillLike />
+									<span className='text-xs'>{currentProblem.likes}</span>
+								</div>
+								<div className='flex items-center cursor-pointer hover:bg-dark-fill-3 space-x-1 rounded p-[3px]  ml-4 text-lg transition-colors duration-200 text-green-s text-dark-gray-6'>
+									<AiFillDislike />
+									<span className='text-xs'>{currentProblem.dislikes}</span>
+								</div>
+								<div className='cursor-pointer hover:bg-dark-fill-3  rounded p-[3px]  ml-4 text-xl transition-colors duration-200 text-green-s text-dark-gray-6 '>
+									<TiStarOutline />
+								</div>
 							</div>
-							<div className='rounded p-[3px] ml-4 text-lg transition-colors duration-200 text-green-s text-dark-green-s'>
-								<BsCheck2Circle />
-							</div>
-							<div className='flex items-center cursor-pointer hover:bg-dark-fill-3 space-x-1 rounded p-[3px]  ml-4 text-lg transition-colors duration-200 text-dark-gray-6'>
-								<AiFillLike />
-								<span className='text-xs'>120</span>
-							</div>
-							<div className='flex items-center cursor-pointer hover:bg-dark-fill-3 space-x-1 rounded p-[3px]  ml-4 text-lg transition-colors duration-200 text-green-s text-dark-gray-6'>
-								<AiFillDislike />
-								<span className='text-xs'>2</span>
-							</div>
-							<div className='cursor-pointer hover:bg-dark-fill-3  rounded p-[3px]  ml-4 text-xl transition-colors duration-200 text-green-s text-dark-gray-6 '>
-								<TiStarOutline />
-							</div>
-						</div>
+						)}
 
 						{/* Problem Statement(paragraphs) */}
 						<div className='text-white text-sm'>
@@ -88,3 +99,34 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
 	);
 };
 export default ProblemDescription;
+
+function useGetCurrentProblem(problemId:string){
+	const [currentProblem, setCurrentProblem] = useState<DBProblem | null>(null);
+	const [loading, setLoading] = useState<boolean>(true);
+	const [problemDifficultyClass, setProblemDifficultyClass] = useState<string>("");
+
+	useEffect(() => {
+		// Get problem from DB
+		const getCurrentProblem = async () => {
+			setLoading(true);
+			const docRef = doc(firestore, "problems", problemId);
+			const docSnap = await getDoc(docRef);
+			if (docSnap.exists()) {
+				const problem = docSnap.data();
+				setCurrentProblem({ id: docSnap.id, ...problem } as DBProblem);
+				// easy, medium, hard
+				setProblemDifficultyClass(
+					problem.difficulty === "Easy"
+						? "bg-olive text-olive"
+						: problem.difficulty === "Medium"
+						? "bg-dark-yellow text-dark-yellow"
+						: " bg-dark-pink text-dark-pink"
+				);
+			}
+			setLoading(false);
+		};
+		getCurrentProblem();
+	}, [problemId]);
+
+	return { currentProblem, loading, problemDifficultyClass, setCurrentProblem };
+}
