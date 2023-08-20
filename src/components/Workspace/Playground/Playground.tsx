@@ -8,10 +8,12 @@ import EditorFooter from './EditorFooter';
 import { Problem } from '@/utils/types/problem';
 
 type PlaygroundProps = {
-  problem: Problem  
+	problem: Problem;
+	setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+	setSolved: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Playground:React.FC<PlaygroundProps> = ({problem}) => {
+const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved }) => {
     const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
     return (
         <div className="flex flex-col bg-dark-layer-1 relative overflow-x-hidden">
