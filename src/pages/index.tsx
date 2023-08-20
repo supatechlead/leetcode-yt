@@ -1,5 +1,6 @@
 import ProblemsTable from "@/components/ProblemsTable/ProblemsTable";
 import Topbar from "@/components/Topbar/Topbar";
+import useHasMounted from "@/hooks/useHasMounted";
 /* import { firestore } from "@/firebase/firebase";
 import { doc, setDoc } from "firebase/firestore"; */
 import { useState } from "react";
@@ -37,6 +38,10 @@ export default function Home() {
 	} */
 
 	const [loadingProblems, setLoadingProblems] = useState(true);	
+	const hasMounted = useHasMounted();
+
+	if(!hasMounted) return null;
+
   return (
     <>    
       <main className="bg-dark-layer-2 min-h-screen">
