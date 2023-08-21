@@ -82,6 +82,11 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved }
       }
     };
 
+    const onChange = (value: string) => {
+      setUserCode(value);
+      localStorage.setItem(`code-${pid}`, JSON.stringify(value));
+    };
+
     return (
         <div className="flex flex-col bg-dark-layer-1 relative overflow-x-hidden">
           <PreferenceNav />  
@@ -90,6 +95,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved }
             <CodeMirror
               value={problem.starterCode}
 						  theme={vscodeDark}
+              onChange={onChange}
 						  extensions={[javascript()]}
 						  style={{ fontSize: 16 }}
 					/>
@@ -137,7 +143,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved }
             </div>
             </div>
           </Split>
-          <EditorFooter />
+          <EditorFooter handleSubmit={handleSubmit} />
         </div>
     )
 }
