@@ -49,7 +49,10 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({ setSettings, settings }) 
 			</div>
 
 			<div className='flex items-center m-2'>
-				<button className='preferenceBtn group'>
+				<button
+					className='preferenceBtn group'
+					onClick={() => setSettings({ ...settings, settingsModalIsOpen: true })}
+				>
 					<div className='h-4 w-4 text-dark-gray-6 font-bold text-lg'>
 						<AiOutlineSetting />
 					</div>
