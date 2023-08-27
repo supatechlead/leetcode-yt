@@ -12,6 +12,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "@/firebase/firebase";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { problems } from "@/utils/problems";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 type PlaygroundProps = {
 	problem: Problem;
@@ -19,9 +20,23 @@ type PlaygroundProps = {
 	setSolved: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export interface ISettings {
+	fontSize: string;
+	settingsModalIsOpen: boolean;
+	dropdownIsOpen: boolean;
+}
+
 const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved }) => {
     const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
     let [userCode, setUserCode] = useState<string>(problem.starterCode);
+
+    const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
+
+    const [settings, setSettings] = useState<ISettings>({
+      fontSize: fontSize,
+      settingsModalIsOpen: false,
+      dropdownIsOpen: false,
+    });
 
     const [user] = useAuthState(auth);
 	const {
@@ -98,7 +113,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved }
 
     return (
         <div className="flex flex-col bg-dark-layer-1 relative overflow-x-hidden">
-          <PreferenceNav />  
+          <PreferenceNav settings={settings} setSettings={setSettings} /> 
           <Split className='h-[calc(100vh-94px)]' direction='vertical' sizes={[60, 40]} minSize={60}>
             <div className='w-full overflow-auto'>
             <CodeMirror
@@ -106,7 +121,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, setSolved }
 						  theme={vscodeDark}
               onChange={onChange}
 						  extensions={[javascript()]}
-						  style={{ fontSize: 16 }}
+						  style={{ fontSize: settings.fontSize}}
 					/>
             </div>
             <div className='w-full px-5 overflow-auto'>
